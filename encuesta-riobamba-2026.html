@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Encuesta Jóvenes con Datos — Riobamba 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rojo: #C0392B;
+    --amarillo: #F4C300;
+    --verde: #1A6B3C;
+    --gris: #F5F5F0;
+    --texto: #1A1A1A;
+    --borde: #D0CFC9;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gris);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--verde);
+    color: white;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: var(--amarillo);
+    opacity: 0.15;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -30px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: var(--rojo);
+    opacity: 0.12;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--amarillo);
+    color: var(--texto);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+  }
+  header p {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    max-width: 480px;
+    margin: 0 auto 1.25rem;
+    line-height: 1.6;
+  }
+  .meta-chips {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .chip {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+  }
+
+  /* FORM */
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin: 2.5rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--borde);
+  }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--borde);
+    transition: box-shadow 0.2s;
+  }
+  .card:focus-within {
+    box-shadow: 0 0 0 2px var(--verde);
+    border-color: var(--verde);
+  }
+
+  label.q {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 0.9rem;
+    line-height: 1.45;
+  }
+  .req { color: var(--rojo); margin-left: 2px; }
+
+  /* TEXT / SELECT */
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--texto);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--verde);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* RADIO / CHECKBOX */
+  .options { display: flex; flex-direction: column; gap: 0.55rem; }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.88rem;
+  }
+  .option:hover { border-color: var(--verde); background: #f0f7f3; }
+  .option input { accent-color: var(--verde); width: 16px; height: 16px; cursor: pointer; }
+  .option input:checked + span { font-weight: 600; }
+
+  /* SCALE */
+  .scale {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .scale-btn {
+    flex: 1;
+    min-width: 36px;
+    aspect-ratio: 1;
+    border: 1.5px solid var(--borde);
+    border-radius: 8px;
+    background: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .scale-btn:hover { border-color: var(--verde); background: #f0f7f3; }
+  .scale-btn.selected { background: var(--verde); color: white; border-color: var(--verde); }
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    color: #777;
+    margin-top: 0.4rem;
+  }
+
+  /* SUBMIT */
+  .submit-wrap { margin-top: 2rem; text-align: center; }
+  button[type="submit"] {
+    background: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.9rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    width: 100%;
+    max-width: 320px;
+  }
+  button[type="submit"]:hover { background: #145230; }
+  button[type="submit"]:active { transform: scale(0.98); }
+  .privacy { font-size: 0.72rem; color: #999; margin-top: 0.75rem; }
+
+  /* SUCCESS */
+  #success {
+    display: none;
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+  #success .icon { font-size: 3rem; margin-bottom: 1rem; }
+  #success h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; color: var(--verde); margin-bottom: 0.5rem; }
+  #success p { color: #555; font-size: 0.9rem; }
+
+  @media (max-width: 480px) {
+    .card { padding: 1.1rem 1.1rem; }
+    header { padding: 2rem 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Riobamba 2026</div>
+  <h1>Jóvenes con Datos</h1>
+  <p>Tu opinión construye la ciudad. Esta encuesta es anónima y tarda 8 minutos. Los resultados serán presentados públicamente.</p>
+  <div class="meta-chips">
+    <span class="chip">🔒 Anónima</span>
+    <span class="chip">⏱ 8 minutos</span>
+    <span class="chip">📊 Resultados públicos</span>
+  </div>
+</header>
+
+<main>
+  <form id="encuesta">
+
+    <!-- SECCIÓN 1: PERFIL -->
+    <div class="section-label">Sección 1 — Tu perfil</div>
+
+    <div class="card">
+      <label class="q" for="edad">1. ¿Cuántos años tienes? <span class="req">*</span></label>
+      <input type="number" id="edad" name="edad" min="15" max="35" placeholder="Ej: 22" required>
+    </div>
+
+    <div class="card">
+      <label class="q">2. ¿Con qué género te identificas? <span class="req">*</span></label>
+      <div class="options">
+        <label class="option"><input type="radio" name="genero" value="mujer" required><span>Mujer</span></label>
+        <label class="option"><input type="radio" name="genero" value="hombre"><span>Hombre</span></label>
+        <label class="option"><input type="radio" name="genero" value="nb"><span>No binario / Otro</span></label>
+        <label class="option"><input type="radio" name="genero" value="prefiero_no"><span>Prefiero no decir</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="q">3. ¿Cuál es tu situación actual? <span class="req">*</span></label>
+      <div class="options">
+        <label class="option"><input type="radio" name="situacion" value="estudiante" required><span>Estudiante</span></label>
+        <label class="option"><input type="radio" name="situacion" value="trabaja"><span>Trabajo</span></label>
+        <label class="option"><input type="radio" name="situacion" value="ambos"><span>Estudio y trabajo</span></label>
+        <label class="option"><input type="radio" name="situacion" value="ninguno"><span>Ninguno actualmente</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="q" for="barrio">4. ¿En qué sector de Riobamba vives?</label>
+      <input type="text" id="barrio" name="barrio" placeholder="Ej: Norte, Centro, Bellavista...">
+    </div>
+
+    <!-- SECCIÓN 2: CIUDAD -->
+    <div class="section-label">Sección 2 — Tu ciudad</div>
+
+    <div class="card">
+      <label class="q">5. ¿Qué tan satisfecho/a estás con los servicios públicos de Riobamba? <span class="req">*</span></label>
+      <div class="scale" id="scale-servicios"></div>
+      <div class="scale-labels"><span>Muy insatisfecho</span><span>Muy satisfecho</span></div>
+      <input type="hidden" name="satisfaccion_servicios" id="val-servicios" required>
+    </div>
+
+    <div class="card">
+      <label class="q">6. ¿Cuáles son los principales problemas que enfrentas como joven en Riobamba? <span class="req">*</span><br><small style="font-weight:400;color:#777">(Puedes elegir varios)</small></label>
+      <div class="options">
+        <label class="option"><input type="checkbox" name="problemas" value="empleo"><span>Falta de empleo / oportunidades laborales</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="transporte"><span>Transporte público deficiente</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="seguridad"><span>Inseguridad</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="educacion"><span>Acceso a educación de calidad</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="espacios"><span>Falta de espacios recreativos / culturales</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="vivienda"><span>Vivienda / costo de vida</span></label>
+        <label class="option"><input type="checkbox" name="problemas" value="otro"><span>Otro</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="q">7. ¿Qué tan seguido participas en actividades comunitarias o ciudadanas?</label>
+      <div class="options">
+        <label class="option"><input type="radio" name="participacion" value="nunca"><span>Nunca</span></label>
+        <label class="option"><input type="radio" name="participacion" value="raramente"><span>Raramente</span></label>
+        <label class="option"><input type="radio" name="participacion" value="aveces"><span>A veces</span></label>
+        <label class="option"><input type="radio" name="participacion" value="frecuente"><span>Frecuentemente</span></label>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 3: FUTURO -->
+    <div class="section-label">Sección 3 — Tu futuro</div>
+
+    <div class="card">
+      <label class="q">8. ¿Planeas quedarte en Riobamba en los próximos 5 años? <span class="req">*</span></label>
+      <div class="options">
+        <label class="option"><input type="radio" name="quedarse" value="si" required><span>Sí, definitivamente</span></label>
+        <label class="option"><input type="radio" name="quedarse" value="probablemente"><span>Probablemente sí</span></label>
+        <label class="option"><input type="radio" name="quedarse" value="probablemente_no"><span>Probablemente no</span></label>
+        <label class="option"><input type="radio" name="quedarse" value="no"><span>No, quiero irme</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="q">9. ¿Qué tan de acuerdo estás con esta frase: "Los jóvenes podemos cambiar Riobamba"?</label>
+      <div class="scale" id="scale-cambio"></div>
+      <div class="scale-labels"><span>Totalmente en desacuerdo</span><span>Totalmente de acuerdo</span></div>
+      <input type="hidden" name="cambio_riobamba" id="val-cambio">
+    </div>
+
+    <div class="card">
+      <label class="q" for="propuesta">10. Si pudieras cambiar UNA cosa de Riobamba, ¿qué sería?</label>
+      <textarea id="propuesta" name="propuesta" placeholder="Escribe tu idea aquí..."></textarea>
+    </div>
+
+    <div class="submit-wrap">
+      <button type="submit">Enviar encuesta →</button>
+      <p class="privacy">🔒 Tus respuestas son anónimas y serán usadas solo con fines estadísticos.</p>
+    </div>
+
+  </form>
+
+  <div id="success">
+    <div class="icon">🎉</div>
+    <h2>¡Gracias por participar!</h2>
+    <p>Tu voz cuenta. Los resultados de esta encuesta se presentarán públicamente en Riobamba 2026.</p>
+  </div>
+</main>
+
+<script>
+  // Generar escalas
+  function buildScale(containerId, inputId, max) {
+    const container = document.getElementById(containerId);
+    for (let i = 1; i <= max; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'scale-btn';
+      btn.textContent = i;
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById(inputId).value = i;
+      });
+      container.appendChild(btn);
+    }
+  }
+
+  buildScale('scale-servicios', 'val-servicios', 5);
+  buildScale('scale-cambio', 'val-cambio', 5);
+
+  // Submit
+  document.getElementById('encuesta').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('encuesta').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
